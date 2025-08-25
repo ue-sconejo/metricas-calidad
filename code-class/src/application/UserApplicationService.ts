@@ -33,6 +33,14 @@ export class UserApplication {
 
     }
 
+    async getAllUsers(): Promise<User[]> {
+        return await this.port.getAllUser();
+    }
+
+    async getUserById(id: number): Promise<User[]> {
+        return await this.port.getAllUser();
+    }
+
 
     async deleteUser(id: number): Promise<boolean> {
         const existingUser = await this.port.getUserById(id);

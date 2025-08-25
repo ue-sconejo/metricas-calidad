@@ -1,25 +1,26 @@
-import express,{Request, Response} from 'express';
+import express, { Response, Request } from 'express';
+import userRouters from "../routes/UserRouters";
 
-class App{
-    private app!:express.Application;
-    constructor(){
+class App {
+    private app!: express.Application;
+
+    constructor() {
         this.app = express();
+        this.middleware();
         this.routes();
     }
 
-    private routes():void{
-        this.app.get("/",(request: Request, response: Response)=>{
-    response.send("Hola estudiantes de Uniempresarial")
-});
-
-        this.app.get("/check",(request: Request, response: Response)=>{
-    response.send("I'm Ready")
-});
+    private middleware(): void {
+        this.app.use(express.json());
     }
-    getApp(){
+
+    private routes(): void {
+        this.app.use("/api", userRouters);
+    }
+
+    getApp() {
         return this.app;
     }
 }
-
 
 export default new App().getApp();
