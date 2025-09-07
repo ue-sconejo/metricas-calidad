@@ -1,16 +1,16 @@
+import app from './infrastructure/web/app';
+import { ServerBootstrap } from './infrastructure/bootstrap/server-bootstrap';
+import { connectDB } from './infrastructure/config/data-base';
 
-import app from './inftraestructure/web/app';
-import { ServerBoostrap } from './inftraestructure/boostrap/server-boostrap';
+const server = new ServerBootstrap(app);
 
-const server = new ServerBoostrap(app);
-(
-    async () => {
-        try{
-            const instances = [server.init()];
-            await Promise.all(instances);
-        } catch (error) {
-            console.error("Error starting server:", error);
-        }
+(async () => {
+    try {
+        await connectDB();
+        const instances = [server.init()];
+        await Promise.all(instances);
+    } catch (error) {
+        console.log('Error on server initialization', error);
+        process.exit(1);
     }
-)();
-
+})();

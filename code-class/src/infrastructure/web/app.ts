@@ -15,7 +15,7 @@ class App {
     }
 
     private routes(): void {
-        this.app.use("/api", userRouters);
+        this.app.use("/users", userRouters);
     }
 
     getApp() {

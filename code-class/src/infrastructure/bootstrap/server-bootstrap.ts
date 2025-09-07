@@ -2,9 +2,7 @@ import http from 'http';
 import express from 'express';
 import envs from '../config/environment-vars';
 
-
-export class ServerBoostrap {
-    //atributos - propiedades - caracteristicas
+export class ServerBootstrap {
     private app!: express.Application;
 
     constructor(app: express.Application) {

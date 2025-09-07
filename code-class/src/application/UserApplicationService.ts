@@ -16,31 +16,28 @@ export class UserApplication {
 
     }
 
-    async updateUser(id: number, user: Partial<User>): Promise<boolean
-    > {
+    async updateUser(id: number, user: Partial<User>): Promise<boolean> {
         const existingUser = await this.port.getUserById(id);
-        if (!existingUser) {
-            throw new Error("El usuario no exite")
-        }
+
+        if (!existingUser) throw new Error("El usuario no exite");
+
         if (user.email) {
             const emailTaken = await this.port.getUserByEmail(user.email);
             if (emailTaken && emailTaken.id !== id) {
-                throw new Error("Error en actualizar el email ¡NO SE PUEDE!");
+                throw new Error("Error en actualizar email");
             }
         }
 
-        return await this.port.updateUser(id, user);
-
+        return await this.port.updateUser(id, user);;
     }
 
     async getAllUsers(): Promise<User[]> {
         return await this.port.getAllUser();
     }
 
-    async getUserById(id: number): Promise<User[]> {
-        return await this.port.getAllUser();
+    async getUserById(id: number): Promise<User | null> {
+        return await this.port.getUserById(id);
     }
-
 
     async deleteUser(id: number): Promise<boolean> {
         const existingUser = await this.port.getUserById(id);
