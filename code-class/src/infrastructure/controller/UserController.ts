@@ -108,4 +108,29 @@ export class UserController {
             return response.status(500).json({ message: "Server Error!" });
         }
     }
+
+    async login(req: Request, res: Response): Promise<string | Response> {
+        try {
+            const { email, password } = req.body;
+            if (!email || !password)
+                return res.status(400).json({ error: "Email y contraseña son requeridos" });
+
+            // Validación de email
+            if (!/^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$/.test(email))
+                return res.status(400).json({ error: "Correo electrónico no válido" });
+
+            // Validación de contraseña
+            if (!/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,25}$/.test(password))
+                return res.status(400).json({
+                    error:
+                        "La contraseña debe tener al menos 6 caracteres y máximo 25, incluyendo al menos una letra y un número",
+                });
+
+            const token = await this.app.login(email, password);
+            return res.status(200).json({ token });
+
+        } catch (error) {
+            return res.status(401).json({ message: "Invalid Credentials" });
+        }
+    }
 }

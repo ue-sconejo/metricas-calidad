@@ -1,7 +1,8 @@
-import { response, Router } from "express";
+import { Response, Router } from "express";
 import { UserApplication } from '../../application/UserApplicationService';
 import { UserController } from "../controller/UserController";
 import { UserAdapter } from "../adapter/UserAdapter";
+import { authenticateToken } from "../web/authMiddleware";
 
 const router = Router();
 
@@ -9,7 +10,11 @@ const userAdapter = new UserAdapter();
 const userApp = new UserApplication(userAdapter);
 const userController = new UserController(userApp);
 
-router.get("/", async (request, response) => {
+router.post('/login', async(request, response)=>{
+    await userController.login(request, response);
+})
+
+router.get("/", authenticateToken, async (request, response) => {
     try {
         await userController.getAllUsers(request, response);
     } catch (error) {

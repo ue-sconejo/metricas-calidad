@@ -1,5 +1,7 @@
 import { User } from "../domain/User";
 import { UserPort } from "../domain/UserPort";
+import { AuthApplication } from "./AuthAplications";
+import bcrypt from 'bcryptjs';
 
 export class UserApplication {
     private port: UserPort;
@@ -7,9 +9,33 @@ export class UserApplication {
     constructor(port: UserPort) {
         this.port = port;
     }
+
+    async login(email: string, password: string): Promise<string> {
+        const existingUser = await this.port.getUserByEmail(email);
+        
+        if (!existingUser) {
+            throw new Error("User not found");
+        }
+        
+        const passwordMath = await bcrypt.compare(password, existingUser.password);
+
+        if (!passwordMath) {
+            throw new Error("Credentials are Invalid");
+        }
+        
+        const token = AuthApplication.generateToken({
+            id: existingUser.id,
+            email: existingUser.email
+        });
+
+        return token;
+    }
+
     async createUser(user: Omit<User, "id">): Promise<number> {
         const existingUser = await this.port.getUserByEmail(user.email);
         if (!existingUser) {
+            const hashedPassword = await bcrypt.hash(user.password, 10);
+            user.password = hashedPassword;
             return this.port.createUser(user);
         }
         throw new Error("El usuario ya exite");
