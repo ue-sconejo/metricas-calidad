@@ -1,6 +1,7 @@
 
 import { DataSource } from "typeorm";
 import { UserEntity } from "../entities/UserEntity";
+import { ProjectEntity } from "../entities/ProjectEntity";
 import envs from "./environment-vars"
 
 export const AppDataSource = new DataSource({
@@ -12,7 +13,7 @@ export const AppDataSource = new DataSource({
     database: envs.DB_NAME,
     synchronize: true,
     logging: false,
-    entities: [UserEntity]
+    entities: [UserEntity, ProjectEntity]
 });
 
 export const connectDB = async () => {

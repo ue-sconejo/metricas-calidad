@@ -1,5 +1,7 @@
 import express, { Response, Request } from 'express';
 import userRouters from "../routes/UserRouters";
+import projectRouters from "../routes/ProjectRouters";
+
 import cors from 'cors';
 
 class App {
@@ -18,6 +20,7 @@ class App {
 
     private routes(): void {
         this.app.use("/users", userRouters);
+        this.app.use("/projects", projectRouters);
     }
 
     getApp() {

@@ -14,11 +14,11 @@ router.post('/login', async(request, response)=>{
     await userController.login(request, response);
 })
 
-router.get("/", authenticateToken, async (request, response) => {
+router.get("/", async (request, response) => {
     try {
         await userController.getAllUsers(request, response);
     } catch (error) {
-        response.status(400).json({ message: "Error en consulta de datos 1" });
+        response.status(400).json({ message: "Error en consulta de datos" });
     }
 });
 
